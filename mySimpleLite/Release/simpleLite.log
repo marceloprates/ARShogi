@@ -1,0 +1,34 @@
+﻿Build started 17/11/2012 13:46:26.
+     1>Project "C:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\simpleLite.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\simpleLite.lastbuildstate".
+       InitializeBuildStatus:
+         Creating "Release\simpleLite.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\..\..\include /Zi /nologo /W1 /WX- /O2 /Ob1 /Ot /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt glm.cpp glmimg.cpp simpleLite.cpp Texture.cpp
+         glm.cpp
+         glmimg.cpp
+         simpleLite.cpp
+         Texture.cpp
+         Generating Code...
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release\simpleLite.exe" /NOLOGO /LIBPATH:C:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\..\..\lib libAR.lib libARgsub_lite.lib libARvideo.lib opengl32.lib glu32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\simpleLite.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"C:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\Release\simpleLite.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Release\simpleLite.lib" /MACHINE:X86 Release\glm.obj
+         Release\glmimg.obj
+         Release\simpleLite.obj
+         Release\Texture.obj
+         C:\Users\Lucas\Documents\IHC\ARToolKit\lib\libARd.lib
+         C:\Users\Lucas\Documents\IHC\ARToolKit\lib\libARgsub_lited.lib
+         C:\Users\Lucas\Documents\IHC\ARToolKit\lib\libARvideod.lib
+     1>libARd.lib(paramDecomp.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+     1>LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+         simpleLite.vcxproj -> C:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\Release\simpleLite.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"Release\simpleLite.exe;#1" /manifest Release\simpleLite.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\simpleLite.unsuccessfulbuild".
+         Touching "Release\simpleLite.lastbuildstate".
+     1>Done Building Project "C:\Users\Lucas\Documents\IHC\ARToolKit\examples\mySimpleLite\simpleLite.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.81
