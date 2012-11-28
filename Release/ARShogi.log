@@ -1,0 +1,24 @@
+﻿Build started 11/27/2012 10:05:09 PM.
+     1>Project "C:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\ARShogi.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\ARShogi.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\..\..\include /Zi /nologo /W1 /WX- /O2 /Ob1 /Ot /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release\ARShogi.exe" /NOLOGO /LIBPATH:C:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\..\..\lib libAR.lib libARgsub_lite.lib libARvideo.lib opengl32.lib glu32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\ARShogi.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\Release\ARShogi.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Release\ARShogi.lib" /MACHINE:X86 Release\glm.obj
+         Release\glmimg.obj
+         Release\Main.obj
+         Release\Texture.obj
+         LINK : Release\ARShogi.exe not found or not built by the last incremental link; performing full link
+         ARShogi.vcxproj -> C:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\Release\ARShogi.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"Release\ARShogi.exe;#1" /manifest Release\ARShogi.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\ARShogi.unsuccessfulbuild".
+         Touching "Release\ARShogi.lastbuildstate".
+     1>Done Building Project "C:\Users\Marcelo\Documents\ARToolKit\examples\ARShogi\ARShogi.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.43
