@@ -76,10 +76,12 @@
     <ClCompile Include="glm.cpp" />
     <ClCompile Include="glmimg.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glm.h" />
+    <ClInclude Include="Piece.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

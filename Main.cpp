@@ -1,38 +1,3 @@
-/*
- *  simpleLite.c
- *
- *  Some code to demonstrate use of gsub_lite's argl*() functions.
- *  Shows the correct GLUT usage to read a video frame (in the idle callback)
- *  and to draw it (in the display callback).
- *
- *  Press '?' while running for help on available key commands.
- *
- *  Copyright (c) 2001-2006 Philip Lamb (PRL) phil@eden.net.nz. All rights reserved.
- *
- *	Rev		Date		Who		Changes
- *	1.0.0	20040302	PRL		Initial version, simple test animation using GLUT.
- *	1.0.1	20040721	PRL		Correctly sets window size; supports arVideoDispOption().
- *
- */
-/*
- * 
- * This file is part of ARToolKit.
- * 
- * ARToolKit is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * ARToolKit is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with ARToolKit; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
- */
 
 
 // ============================================================================
@@ -53,6 +18,7 @@
 #include <AR/gsub_lite.h>
 
 #include "glm.h"
+#include "Piece.h"
 
 // ============================================================================
 //	Constants
@@ -92,123 +58,54 @@ static ARParam		gARTCparam;
 static ARGL_CONTEXT_SETTINGS_REF gArglSettings = NULL;
 static int gDrawRotate = FALSE;
 static float gDrawRotateAngle = 0;			// For use in drawing.
-static GLMmodel *model;
+
+// ============================================================================
+// Pieces
+// ============================================================================
+
+static Piece* gabumon;
+
+static Piece* king;
+static Piece* rook;
+static Piece* bishop;
+static Piece* gold_general;
+static Piece* silver_general;
+static Piece* knight;
+static Piece* lance;
+static Piece* pawn;
 
 // ============================================================================
 //	Functions
 // ============================================================================
 
+static void Init(void)
+{
+	gabumon = new Piece(glmReadOBJ("../Models/gabumon.obj"));//Gabumon);
+
+	/*
+	king = new Piece(glmReadOBJ("../Models/king.obj"));
+	rook = new Piece(glmReadOBJ("../Models/rook.obj"));
+	bishop = new Piece(glmReadOBJ("../Models/bishop.obj"));
+	gold_general = new Piece(glmReadOBJ("../Models/gold_general.obj"));
+	silver_general = new Piece(glmReadOBJ("../Models/silver_general.obj"));
+	knight = new Piece(glmReadOBJ("../Models/knight.obj"));
+	lance = new Piece(glmReadOBJ("../Models/lance.obj"));
+	pawn = new Piece(glmReadOBJ("../Models/pawn.obj"));
+	*/
+}
+
 static void DrawSomething(void)
 {
+	gabumon->Draw();
+	/*
 	glPushMatrix(); // Save world coordinate system.
 	glTranslatef(0.0, 0.0, 0.0); // Place base of cube on marker surface.
 	glRotatef(90.0, 1.0, 0.0, 0.0); // Rotate about z axis.
 	//glScalef(0.5, 0.5, 0.5);
 	glDisable(GL_LIGHTING);	// Just use colours.
-	glmDraw(model,/*GLM_SMOOTH|*/GLM_TEXTURE|GLM_MATERIAL);
+	glmDraw(gabumon,GLM_TEXTURE|GLM_MATERIAL);
 	glPopMatrix();	// Restore world coordinate system.
-}
-
-// Something to look at, draw a rotating colour cube.
-static void DrawCube(void)
-{
-	// Colour cube data.
-	static GLuint polyList = 0;
-	float fSize = 0.5f;
-	long f, i;	
-	const GLfloat cube_vertices [8][3] = {
-	{1.0, 1.0, 1.0}, {1.0, -1.0, 1.0}, {-1.0, -1.0, 1.0}, {-1.0, 1.0, 1.0},
-	{1.0, 1.0, -1.0}, {1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0}, {-1.0, 1.0, -1.0} };
-	const GLfloat cube_vertex_colors [8][3] = {
-	{1.0, 1.0, 1.0}, {1.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 1.0},
-	{1.0, 0.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 1.0} };
-	GLint cube_num_faces = 6;
-	const short cube_faces [6][4] = {
-	{3, 2, 1, 0}, {2, 3, 7, 6}, {0, 1, 5, 4}, {3, 0, 4, 7}, {1, 2, 6, 5}, {4, 5, 6, 7} };
-	
-	if (!polyList) {
-		polyList = glGenLists (1);
-		glNewList(polyList, GL_COMPILE);
-		glBegin (GL_QUADS);
-		for (f = 0; f < cube_num_faces; f++)
-			for (i = 0; i < 4; i++) {
-				glColor3f (cube_vertex_colors[cube_faces[f][i]][0], cube_vertex_colors[cube_faces[f][i]][1], cube_vertex_colors[cube_faces[f][i]][2]);
-				glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			}
-		glEnd ();
-		glColor3f (0.0, 0.0, 0.0);
-		for (f = 0; f < cube_num_faces; f++) {
-			glBegin (GL_LINE_LOOP);
-			for (i = 0; i < 4; i++)
-				glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			glEnd ();
-		}
-		glEndList ();
-	}
-	
-	glPushMatrix(); // Save world coordinate system.
-	glTranslatef(0.0, 0.0, 0.5); // Place base of cube on marker surface.
-	glRotatef(gDrawRotateAngle, 0.0, 0.0, 1.0); // Rotate about z axis.
-	glDisable(GL_LIGHTING);	// Just use colours.
-	glCallList(polyList);	// Draw the cube.
-	glPopMatrix();	// Restore world coordinate system.
-	
-}
-
-#ifdef SOMETHINGELSE
-// Something to look at, draw a rotating colour cube.
-static void DrawSomethingElse(void)
-{
-	// Colour cube data.
-	static GLuint polyList = 0;
-	float fSize = 0.5f;
-	long f, i;	
-	const GLfloat cube_vertices [8][3] = {
-	{1.0, 1.0, 1.0}, {1.0, -1.0, 1.0}, {-1.0, -1.0, 1.0}, {-1.0, 1.0, 1.0},
-	{1.0, 1.0, -1.0}, {1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0}, {-1.0, 1.0, -1.0} };
-	const GLfloat cube_vertex_colors [8][3] = {
-	{1.0, 1.0, 1.0}, {1.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 1.0},
-	{1.0, 0.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 1.0} };
-	GLint cube_num_faces = 6;
-	const short cube_faces [6][4] = {
-	{3, 2, 1, 0}, {2, 3, 7, 6}, {0, 1, 5, 4}, {3, 0, 4, 7}, {1, 2, 6, 5}, {4, 5, 6, 7} };
-	
-	if (!polyList) {
-		polyList = glGenLists (1);
-		glNewList(polyList, GL_COMPILE);
-		glBegin (GL_QUADS);
-		for (f = 0; f < cube_num_faces; f++)
-			for (i = 0; i < 4; i++) {
-				glColor3f (1.0, 0.0, 0.0);
-				glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			}
-		glEnd ();
-		glColor3f (0.0, 0.0, 0.0);
-		for (f = 0; f < cube_num_faces; f++) {
-			glBegin (GL_LINE_LOOP);
-			for (i = 0; i < 4; i++)
-				glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			glEnd ();
-		}
-		glEndList ();
-	}
-	
-	glPushMatrix(); // Save world coordinate system.
-	glTranslatef(0.0, 0.0, 0.5); // Place base of cube on marker surface.
-	glRotatef(gDrawRotateAngle, 0.0, 0.0, 1.0); // Rotate about z axis.
-	glDisable(GL_LIGHTING);	// Just use colours.
-	glCallList(polyList);	// Draw the cube.
-	glPopMatrix();	// Restore world coordinate system.
-	
-}
-#endif
-
-static void DrawCubeUpdate(float timeDelta)
-{
-	if (gDrawRotate) {
-		gDrawRotateAngle += timeDelta * 45.0f; // Rotate cube at 45 degrees per second.
-		if (gDrawRotateAngle > 360.0f) gDrawRotateAngle -= 360.0f;
-	}
+	*/
 }
 
 static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
@@ -248,7 +145,8 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
 static int setupMarker(const char *patt_name, int *patt_id)
 {
 	
-    if((*patt_id = arLoadPatt(patt_name)) < 0) {
+    if((*patt_id = arLoadPatt(patt_name)) < 0) 
+	{
         fprintf(stderr, "setupMarker(): pattern load error !!\n");
         return (FALSE);
     }
@@ -365,9 +263,6 @@ static void Idle(void)
 	if (s_elapsed < 0.01f) return; // Don't update more often than 100 Hz.
 	ms_prev = ms;
 	
-	// Update drawing.
-	DrawCubeUpdate(s_elapsed);
-	
 	// Grab a video frame.
 	if ((image = arVideoGetImage()) != NULL) {
 		gARTImage = image;	// Save the fetched image.
@@ -407,9 +302,12 @@ static void Idle(void)
 //
 static void Visibility(int visible)
 {
-	if (visible == GLUT_VISIBLE) {
+	if (visible == GLUT_VISIBLE) 
+	{
 		glutIdleFunc(Idle);
-	} else {
+	} 
+	else 
+	{
 		glutIdleFunc(NULL);
 	}
 }
@@ -447,7 +345,8 @@ static void Display(void)
 	arVideoCapNext();
 	gARTImage = NULL; // Image data is no longer valid after calling arVideoCapNext().
 				
-	if (gPatt_found) {
+	if (gPatt_found) 
+	{
 		// Projection transformation.
 		arglCameraFrustumRH(&gARTCparam, VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);
 		glMatrixMode(GL_PROJECTION);
@@ -498,11 +397,14 @@ int main(int argc, char** argv)
 	// Hardware setup.
 	//
 
-	if (!setupCamera(cparam_name, vconf, &gARTCparam)) {
+	if (!setupCamera(cparam_name, vconf, &gARTCparam)) 
+	{
 		fprintf(stderr, "main(): Unable to set up AR camera.\n");
 		exit(-1);
 	}
-	if (!setupMarker(patt_name, &gPatt_id)) {
+	
+	if (!setupMarker(patt_name, &gPatt_id)) 
+	{
 		fprintf(stderr, "main(): Unable to set up AR marker.\n");
 		exit(-1);
 	}
@@ -512,31 +414,54 @@ int main(int argc, char** argv)
 	//
 
 	// Set up GL context(s) for OpenGL to draw into.
+	
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	if (!prefWindowed) {
-		if (prefRefresh) sprintf(glutGamemode, "%ix%i:%i@%i", prefWidth, prefHeight, prefDepth, prefRefresh);
-		else sprintf(glutGamemode, "%ix%i:%i", prefWidth, prefHeight, prefDepth);
+	
+	if (!prefWindowed) 
+	{
+		if (prefRefresh)
+		{
+			sprintf(glutGamemode, "%ix%i:%i@%i", prefWidth, prefHeight, prefDepth, prefRefresh);
+		}
+		else
+		{
+			sprintf(glutGamemode, "%ix%i:%i", prefWidth, prefHeight, prefDepth);
+		}
+		
 		glutGameModeString(glutGamemode);
+
 		glutEnterGameMode();
-	} else {
+	} 
+	else 
+	{
 		glutInitWindowSize(prefWidth, prefHeight);
+
 		glutCreateWindow(argv[0]);
 	}
 
 	// Setup argl library for current context.
-	if ((gArglSettings = arglSetupForCurrentContext()) == NULL) {
+	if ((gArglSettings = arglSetupForCurrentContext()) == NULL) 
+	{
 		fprintf(stderr, "main(): arglSetupForCurrentContext() returned error.\n");
+
 		exit(-1);
 	}
+
 	debugReportMode();
+
 	glEnable(GL_DEPTH_TEST);
+
 	arUtilTimerReset();
-	
-	model = glmReadOBJ("../Models/gabumon.obj");
-    //glmVertexNormals(model,90.0);
+
+	// ----------------------------------------------------------------------------
+	// Program Init
+	//
+
+	Init();
 
 	// Register GLUT event-handling callbacks.
 	// NB: Idle() is registered by Visibility.
+
 	glutDisplayFunc(Display);
 	glutReshapeFunc(Reshape);
 	glutVisibilityFunc(Visibility);
