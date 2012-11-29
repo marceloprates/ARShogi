@@ -264,32 +264,47 @@ static void Idle(void)
 	ms_prev = ms;
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
+	if ((image = arVideoGetImage()) != NULL) 
+	{
 		gARTImage = image;	// Save the fetched image.
 		gPatt_found = FALSE;	// Invalidate any previous detected markers.
 		
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARTImage, gARTThreshhold, &marker_info, &marker_num) < 0) {
+		if (arDetectMarker(gARTImage, gARTThreshhold, &marker_info, &marker_num) < 0) 
+		{
 			exit(-1);
 		}
 		
 		// Check through the marker_info array for highest confidence
 		// visible marker matching our preferred pattern.
+
 		k = -1;
-		for (j = 0; j < marker_num; j++) {
-			if (marker_info[j].id == gPatt_id) {
-				if (k == -1) k = j; // First marker detected.
-				else if(marker_info[j].cf > marker_info[k].cf) k = j; // Higher confidence marker detected.
+		for (j = 0; j < marker_num; j++) 
+		{
+			if (marker_info[j].id == gPatt_id)
+			{
+				if (k == -1) // First marker detected.
+				{
+					k = j;
+				}
+				else if(marker_info[j].cf > marker_info[k].cf) // Higher confidence marker detected.
+				{
+					k = j;
+				}
 			}
 		}
 		
-		if (k != -1) {
+		if (k != -1) 
+		{
 			// Get the transformation between the marker and the real camera into gPatt_trans.
 			arGetTransMat(&(marker_info[k]), gPatt_centre, gPatt_width, gPatt_trans);
 			gPatt_found = TRUE;
 		}
+
+		gabumon->RotateY(0.1);
+		gabumon->Scale(1.01);
 		
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();

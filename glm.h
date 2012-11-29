@@ -18,6 +18,7 @@
 
 #include <GL/glut.h>
 
+#define RAD_TO_PI 57.295779513082320876798154814105
 
 #ifndef M_PI
 #define M_PI 3.14159265f

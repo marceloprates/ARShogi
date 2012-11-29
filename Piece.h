@@ -12,6 +12,7 @@
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <math.h>
 
 #include "glm.h"
 
@@ -39,7 +40,6 @@ public:
 
 	void Draw();
 
-	void Rotate(double angle, double x, double y, double z);
 	void RotateX(double angle);
 	void RotateY(double angle);
 	void RotateZ(double angle);

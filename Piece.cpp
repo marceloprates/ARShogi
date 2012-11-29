@@ -58,6 +58,10 @@ void Piece::Draw()
 
 		glRotatef(90.0, 1.0, 0.0, 0.0); // Rotate about z axis.
 
+		glRotatef((float)(this->rotate[1] * RAD_TO_PI), this->up[0], this->up[1], this->up[2]);
+		glRotatef((float)(this->rotate[0] * RAD_TO_PI), this->right[0] , this->right[1] , this->right[2]);
+		glRotatef((float)(this->rotate[2] * RAD_TO_PI), this->front[0] , this->front[1] , this->front[2]);
+
 		glScalef(this->scale[0], this->scale[1], this->scale[2]);
 
 		glDisable(GL_LIGHTING);	// Just use colours.
@@ -67,24 +71,43 @@ void Piece::Draw()
 	glPopMatrix();	// Restore world coordinate system.
 }
 
-void Piece::Rotate(double angle, double x, double y, double z)
-{
-
-}
-
 void Piece::RotateX(double angle)
 {
-	this->Rotate(angle, 1.0, 0.0, 0.0);
+	float x = this->right[0];
+	float y = this->right[1];
+	float z = this->right[2];
+
+	this->right[0] = x;
+	this->right[1] = cosf(angle)*y - sinf(angle)*z;
+	this->right[2] = sinf(angle)*y + cosf(angle)*z;
+
+	this->rotate[0] += angle;
 }
 
 void Piece::RotateY(double angle)
 {
-	this->Rotate(angle, 0.0, 1.0, 0.0);
+	float x = this->up[0];
+	float y = this->up[1];
+	float z = this->up[2];
+
+	this->up[0] = cosf(angle)*x + sinf(angle)*z;
+	this->up[1] = y;
+	this->up[2] = -sinf(angle)*x + cosf(angle)*z;
+
+	this->rotate[1] += angle;
 }
 
 void Piece::RotateZ(double angle)
 {
-	this->Rotate(angle, 0.0, 0.0, 1.0);
+	float x = this->front[0];
+	float y = this->front[1];
+	float z = this->front[2];
+
+	this->front[0] = cosf(angle)*x - sinf(angle)*y;
+	this->front[1] = sinf(angle)*x + cosf(angle)*y;
+	this->front[2] = z;
+
+	this->rotate[2] += angle;
 }
 
 void Piece::Scale(double sx, double sy, double sz)
