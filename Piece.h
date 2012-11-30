@@ -46,6 +46,11 @@ public:
 
 	void Scale(double sx, double sy, double sz);
 	void Scale(double factor);
+	void SetSize(double sx, double sy, double sz);
+	void SetSize(double s);
+	void SetSizeX(double s);
+	void SetSizeY(double s);
+	void SetSizeZ(double s);
 
 	void Translate(double tx, double ty, double tz);
 	void TranslateX(double t);

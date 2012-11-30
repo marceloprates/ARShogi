@@ -62,8 +62,9 @@ static float gDrawRotateAngle = 0;			// For use in drawing.
 // ============================================================================
 // Pieces
 // ============================================================================
+double angle = 0.0;
 
-static Piece* gabumon;
+static Piece* gabumon; 
 
 static Piece* king;
 static Piece* rook;
@@ -303,8 +304,10 @@ static void Idle(void)
 			gPatt_found = TRUE;
 		}
 
-		gabumon->RotateY(0.1);
-		gabumon->Scale(1.01);
+		//gabumon->RotateY(0.1);
+		gabumon->SetSizeY(1.0 + sin(angle)/10);
+		gabumon->TranslateZ(cos(angle)/5);
+		angle += 1.0;
 		
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();

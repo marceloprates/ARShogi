@@ -122,6 +122,33 @@ void Piece::Scale(double factor)
 	this->Scale(factor,factor,factor);
 }
 
+void Piece::SetSize(double sx, double sy, double sz)
+{
+	this->scale[0] = sx;
+	this->scale[1] = sy;
+	this->scale[2] = sz;
+}
+
+void Piece::SetSize(double s)
+{
+	this->SetSize(s,s,s);
+}
+
+void Piece::SetSizeX(double s)
+{
+	this->SetSize(s,this->scale[1],this->scale[2]);
+}
+
+void Piece::SetSizeY(double s)
+{
+	this->SetSize(this->scale[0],s,this->scale[2]);
+}
+
+void Piece::SetSizeZ(double s)
+{
+	this->SetSize(this->scale[0],this->scale[1],s);
+}
+
 void Piece::Translate(double tx, double ty, double tz)
 {
 	this->translate[0] += tx;
