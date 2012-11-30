@@ -306,7 +306,7 @@ static void Idle(void)
 
 		//gabumon->RotateY(0.1);
 		gabumon->SetSizeY(1.0 + sin(angle)/10);
-		gabumon->TranslateZ(cos(angle)/5);
+		gabumon->TranslateZ(cos(angle/4)/8);
 		angle += 1.0;
 		
 		// Tell GLUT the display has changed.
