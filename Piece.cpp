@@ -12,6 +12,14 @@ Piece::Piece(GLMmodel* model)
 	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
 	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
 	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
+
+	this->patt_name = "Data/custom/patt1.patt";
+
+	setupMarker(this->patt_name, &(this->patt_id));
+
+	this->patt_width = 80.0;
+	this->patt_centre[0] = 0.0; this->patt_centre[1] = 0.0;
+	this->patt_found = FALSE;
 }
 
 Piece::Piece(char* address)
@@ -173,4 +181,16 @@ void Piece::TranslateZ(double t)
 
 Piece::~Piece(void)
 {
+}
+
+int Piece::setupMarker(const char *patt_name, int *patt_id)
+{
+	
+    if((*patt_id = arLoadPatt(patt_name)) < 0) 
+	{
+        fprintf(stderr, "setupMarker(): pattern load error !!\n");
+        return (FALSE);
+    }
+	
+	return (TRUE);
 }

@@ -16,6 +16,7 @@
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <list>
 
 #include "glm.h"
 #include "Piece.h"
@@ -75,6 +76,8 @@ static Piece* knight;
 static Piece* lance;
 static Piece* pawn;
 
+static std::list<Piece*> pieces;
+
 // ============================================================================
 //	Functions
 // ============================================================================
@@ -93,20 +96,23 @@ static void Init(void)
 	lance = new Piece(glmReadOBJ("../Models/lance.obj"));
 	pawn = new Piece(glmReadOBJ("../Models/pawn.obj"));
 	*/
+
+	pieces.push_back(gabumon);
+	/*
+	pieces.push_back(king);
+	pieces.push_back(rook);
+	pieces.push_back(bishop);
+	pieces.push_back(gold_general);
+	pieces.push_back(silver_general);
+	pieces.push_back(knight);
+	pieces.push_back(lance);
+	pieces.push_back(pawn);
+	*/
 }
 
 static void DrawSomething(void)
 {
 	gabumon->Draw();
-	/*
-	glPushMatrix(); // Save world coordinate system.
-	glTranslatef(0.0, 0.0, 0.0); // Place base of cube on marker surface.
-	glRotatef(90.0, 1.0, 0.0, 0.0); // Rotate about z axis.
-	//glScalef(0.5, 0.5, 0.5);
-	glDisable(GL_LIGHTING);	// Just use colours.
-	glmDraw(gabumon,GLM_TEXTURE|GLM_MATERIAL);
-	glPopMatrix();	// Restore world coordinate system.
-	*/
 }
 
 static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
@@ -115,27 +121,35 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
 	int				xsize, ysize;
 	
     // Open the video path.
-    if (arVideoOpen(vconf) < 0) {
+    if (arVideoOpen(vconf) < 0) 
+	{
     	fprintf(stderr, "setupCamera(): Unable to open connection to camera.\n");
     	return (FALSE);
 	}
 	
     // Find the size of the window.
-    if (arVideoInqSize(&xsize, &ysize) < 0) return (FALSE);
-    fprintf(stdout, "Camera image size (x,y) = (%d,%d)\n", xsize, ysize);
+    if (arVideoInqSize(&xsize, &ysize) < 0)
+	{
+		return (FALSE);
+	}
+    
+	fprintf(stdout, "Camera image size (x,y) = (%d,%d)\n", xsize, ysize);
 	
 	// Load the camera parameters, resize for the window and init.
-    if (arParamLoad(cparam_name, 1, &wparam) < 0) {
+    if (arParamLoad(cparam_name, 1, &wparam) < 0)
+	{
 		fprintf(stderr, "setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
         return (FALSE);
     }
+
     arParamChangeSize(&wparam, xsize, ysize, cparam);
     fprintf(stdout, "*** Camera Parameter ***\n");
     arParamDisp(cparam);
 	
     arInitCparam(cparam);
 
-	if (arVideoCapStart() != 0) {
+	if (arVideoCapStart() != 0)
+	{
     	fprintf(stderr, "setupCamera(): Unable to begin camera data capture.\n");
 		return (FALSE);		
 	}
@@ -159,35 +173,52 @@ static int setupMarker(const char *patt_name, int *patt_id)
 // arImageProcMode, arglDrawMode, arTemplateMatchingMode, arMatchingPCAMode.
 static void debugReportMode(void)
 {
-	if(arFittingMode == AR_FITTING_TO_INPUT ) {
+	if(arFittingMode == AR_FITTING_TO_INPUT )
+	{
 		fprintf(stderr, "FittingMode (Z): INPUT IMAGE\n");
-	} else {
+	} 
+	else
+	{
 		fprintf(stderr, "FittingMode (Z): COMPENSATED IMAGE\n");
 	}
 	
-	if( arImageProcMode == AR_IMAGE_PROC_IN_FULL ) {
+	if( arImageProcMode == AR_IMAGE_PROC_IN_FULL )
+	{
 		fprintf(stderr, "ProcMode (X)   : FULL IMAGE\n");
-	} else {
+	} 
+	else
+	{
 		fprintf(stderr, "ProcMode (X)   : HALF IMAGE\n");
 	}
 	
-	if (arglDrawModeGet(gArglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) {
+	if (arglDrawModeGet(gArglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS)
+	{
 		fprintf(stderr, "DrawMode (C)   : GL_DRAW_PIXELS\n");
-	} else if (arglTexmapModeGet(gArglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) {
+	} 
+	else if (arglTexmapModeGet(gArglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) 
+	{
 		fprintf(stderr, "DrawMode (C)   : TEXTURE MAPPING (FULL RESOLUTION)\n");
-	} else {
+	} 
+	else 
+	{
 		fprintf(stderr, "DrawMode (C)   : TEXTURE MAPPING (HALF RESOLUTION)\n");
 	}
 		
-	if( arTemplateMatchingMode == AR_TEMPLATE_MATCHING_COLOR ) {
+	if( arTemplateMatchingMode == AR_TEMPLATE_MATCHING_COLOR ) 
+	{
 		fprintf(stderr, "TemplateMatchingMode (M)   : Color Template\n");
-	} else {
+	} 
+	else 
+	{
 		fprintf(stderr, "TemplateMatchingMode (M)   : BW Template\n");
 	}
 	
-	if( arMatchingPCAMode == AR_MATCHING_WITHOUT_PCA ) {
+	if( arMatchingPCAMode == AR_MATCHING_WITHOUT_PCA ) 
+	{
 		fprintf(stderr, "MatchingPCAMode (P)   : Without PCA\n");
-	} else {
+	} 
+	else 
+	{
 		fprintf(stderr, "MatchingPCAMode (P)   : With PCA\n");
 	}
 }
@@ -257,27 +288,27 @@ static void Idle(void)
 	ARMarkerInfo    *marker_info;					// Pointer to array holding the details of detected markers.
     int             marker_num;						// Count of number of markers detected.
     int             j, k;
-	
+
 	// Find out how long since Idle() last ran.
 	ms = glutGet(GLUT_ELAPSED_TIME);
 	s_elapsed = (float)(ms - ms_prev) * 0.001;
 	if (s_elapsed < 0.01f) return; // Don't update more often than 100 Hz.
 	ms_prev = ms;
-	
+
 	// Grab a video frame.
 	if ((image = arVideoGetImage()) != NULL) 
 	{
 		gARTImage = image;	// Save the fetched image.
 		gPatt_found = FALSE;	// Invalidate any previous detected markers.
-		
+
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
-		
+
 		// Detect the markers in the video frame.
 		if (arDetectMarker(gARTImage, gARTThreshhold, &marker_info, &marker_num) < 0) 
 		{
 			exit(-1);
 		}
-		
+
 		// Check through the marker_info array for highest confidence
 		// visible marker matching our preferred pattern.
 
@@ -296,11 +327,11 @@ static void Idle(void)
 				}
 			}
 		}
-		
+
 		if (k != -1) 
 		{
 			// Get the transformation between the marker and the real camera into gPatt_trans.
-			arGetTransMat(&(marker_info[k]), gPatt_centre, gPatt_width, gPatt_trans);
+			arGetTransMat(&(marker_info[k]), gabumon->patt_centre, gabumon->patt_width, gabumon->patt_trans);
 			gPatt_found = TRUE;
 		}
 
@@ -308,12 +339,11 @@ static void Idle(void)
 		gabumon->SetSizeY(1.0 + sin(angle)/10);
 		gabumon->TranslateZ(cos(angle/4)/8);
 		angle += 1.0;
-		
+
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();
 	}
 }
-
 //
 //	This function is called on events when the visibility of the
 //	GLUT window changes (including when it first becomes visible).
@@ -354,15 +384,15 @@ static void Display(void)
 {
     GLdouble p[16];
 	GLdouble m[16];
-	
+
 	// Select correct buffer for this context.
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
-	
+
 	arglDispImage(gARTImage, &gARTCparam, 1.0, gArglSettings);	// zoom = 1.0.
 	arVideoCapNext();
 	gARTImage = NULL; // Image data is no longer valid after calling arVideoCapNext().
-				
+
 	if (gPatt_found) 
 	{
 		// Projection transformation.
@@ -370,24 +400,24 @@ static void Display(void)
 		glMatrixMode(GL_PROJECTION);
 		glLoadMatrixd(p);
 		glMatrixMode(GL_MODELVIEW);
-		
+
 		// Viewing transformation.
 		glLoadIdentity();
 		// Lighting and geometry that moves with the camera should go here.
 		// (I.e. must be specified before viewing transformations.)
 		//none
-		
+
 		// ARToolKit supplied distance in millimetres, but I want OpenGL to work in my units.
-		arglCameraViewRH(gPatt_trans, m, VIEW_SCALEFACTOR);
+		arglCameraViewRH(gabumon->patt_trans, m, VIEW_SCALEFACTOR);
 		glLoadMatrixd(m);
 
 		// All other lighting and geometry goes here.
 		DrawSomething();
 	} // gPatt_found
-	
+
 	// Any 2D overlays go here.
 	//none
-	
+
 	glutSwapBuffers();
 }
 

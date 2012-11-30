@@ -33,6 +33,13 @@ class Piece
 {
 public:
 
+	const char*	patt_name;
+	double		patt_width;
+	double		patt_centre[2];
+	double		patt_trans[3][4];
+	int			patt_found;
+	int			patt_id;
+
 	Piece(GLMmodel* model);
 	Piece(char* address);
 	Piece(PieceType pieceType);
@@ -57,6 +64,7 @@ public:
 	void TranslateY(double t);
 	void TranslateZ(double t);
 
+
 private:
 
 	GLMmodel* model;
@@ -68,6 +76,8 @@ private:
 	double rotate[3];
 	double scale[3];
 	double translate[3];
+
+	static int setupMarker(const char *patt_name, int *patt_id);
 	
 };
 
