@@ -40,6 +40,7 @@ public:
 	int			patt_found;
 	int			patt_id;
 
+	Piece(GLMmodel* model, char* patt_name);
 	Piece(GLMmodel* model);
 	Piece(char* address);
 	Piece(PieceType pieceType);
@@ -53,6 +54,9 @@ public:
 
 	void Scale(double sx, double sy, double sz);
 	void Scale(double factor);
+	void ScaleX(double s);
+	void ScaleY(double s);
+	void ScaleZ(double s);
 	void SetSize(double sx, double sy, double sz);
 	void SetSize(double s);
 	void SetSizeX(double s);
@@ -63,6 +67,12 @@ public:
 	void TranslateX(double t);
 	void TranslateY(double t);
 	void TranslateZ(double t);
+	void SetPosition(double x, double y, double z);
+	void SetPositionX(double x);
+	void SetPositionY(double y);
+	void SetPositionZ(double z);
+
+	void Animate();
 
 
 private:
@@ -76,6 +86,8 @@ private:
 	double rotate[3];
 	double scale[3];
 	double translate[3];
+
+	double angle;
 
 	static int setupMarker(const char *patt_name, int *patt_id);
 	

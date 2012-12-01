@@ -66,6 +66,7 @@ static float gDrawRotateAngle = 0;			// For use in drawing.
 double angle = 0.0;
 
 static Piece* gabumon; 
+static Piece* mewtwo;
 
 static Piece* king;
 static Piece* rook;
@@ -84,7 +85,13 @@ static std::list<Piece*> pieces;
 
 static void Init(void)
 {
-	gabumon = new Piece(glmReadOBJ("../Models/gabumon.obj"));//Gabumon);
+	GLMmodel* m;
+
+	m = glmReadOBJ("../Models/gabumon.obj"); glmScale(m,1.0);
+	gabumon = new Piece(glmReadOBJ("../Models/gabumon.obj"),"Data/custom/patt1.patt");
+
+	m = glmReadOBJ("../Models/mewtwo/mewtwo.obj"); glmScale(m,0.1);
+	mewtwo = new Piece(m,"Data/custom/patt2.patt");
 
 	/*
 	king = new Piece(glmReadOBJ("../Models/king.obj"));
@@ -98,6 +105,7 @@ static void Init(void)
 	*/
 
 	pieces.push_back(gabumon);
+	pieces.push_back(mewtwo);
 	/*
 	pieces.push_back(king);
 	pieces.push_back(rook);
@@ -278,6 +286,14 @@ static void Keyboard(unsigned char key, int x, int y)
 	}
 }
 
+static void AnimateModels(void)
+{
+	for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
+	{
+		(*it)->Animate();
+	}
+}
+
 static void Idle(void)
 {
 	static int ms_prev;
@@ -299,51 +315,55 @@ static void Idle(void)
 	if ((image = arVideoGetImage()) != NULL) 
 	{
 		gARTImage = image;	// Save the fetched image.
-		gPatt_found = FALSE;	// Invalidate any previous detected markers.
-
+		
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
-
+		
 		// Detect the markers in the video frame.
 		if (arDetectMarker(gARTImage, gARTThreshhold, &marker_info, &marker_num) < 0) 
 		{
 			exit(-1);
 		}
 
-		// Check through the marker_info array for highest confidence
-		// visible marker matching our preferred pattern.
-
-		k = -1;
-		for (j = 0; j < marker_num; j++) 
+		for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
 		{
-			if (marker_info[j].id == gPatt_id)
-			{
-				if (k == -1) // First marker detected.
+			(*it)->patt_found = FALSE;	// Invalidate any previous detected markers.
+
+			// Check through the marker_info array for highest confidence
+			// visible marker matching our preferred pattern.
+
+			k = -1;
+			for (j = 0; j < marker_num; j++) 
+			{				
+				if (marker_info[j].id == (*it)->patt_id)
 				{
-					k = j;
-				}
-				else if(marker_info[j].cf > marker_info[k].cf) // Higher confidence marker detected.
-				{
-					k = j;
+
+					if (k == -1) // First marker detected.
+					{
+						k = j;
+					}
+					else if(marker_info[j].cf > marker_info[k].cf) // Higher confidence marker detected.
+					{
+						k = j;
+					}
 				}
 			}
+
+			if (k != -1) 
+			{
+				// Get the transformation between the marker and the real camera into gPatt_trans.
+				arGetTransMat(&(marker_info[k]), (*it)->patt_centre, (*it)->patt_width, (*it)->patt_trans);
+				(*it)->patt_found = TRUE;
+			}
+
 		}
 
-		if (k != -1) 
-		{
-			// Get the transformation between the marker and the real camera into gPatt_trans.
-			arGetTransMat(&(marker_info[k]), gabumon->patt_centre, gabumon->patt_width, gabumon->patt_trans);
-			gPatt_found = TRUE;
-		}
-
-		//gabumon->RotateY(0.1);
-		gabumon->SetSizeY(1.0 + sin(angle)/10);
-		gabumon->TranslateZ(cos(angle/4)/8);
-		angle += 1.0;
+		AnimateModels();
 
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();
 	}
 }
+
 //
 //	This function is called on events when the visibility of the
 //	GLUT window changes (including when it first becomes visible).
@@ -393,30 +413,35 @@ static void Display(void)
 	arVideoCapNext();
 	gARTImage = NULL; // Image data is no longer valid after calling arVideoCapNext().
 
-	if (gPatt_found) 
+	for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
 	{
-		// Projection transformation.
-		arglCameraFrustumRH(&gARTCparam, VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixd(p);
-		glMatrixMode(GL_MODELVIEW);
+		if ((*it)->patt_found) // gPatt_found
+		{
+			// Projection transformation.
+			arglCameraFrustumRH(&gARTCparam, VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);
+			glMatrixMode(GL_PROJECTION);
+			glLoadMatrixd(p);
+			glMatrixMode(GL_MODELVIEW);
 
-		// Viewing transformation.
-		glLoadIdentity();
-		// Lighting and geometry that moves with the camera should go here.
-		// (I.e. must be specified before viewing transformations.)
+			// Viewing transformation.
+			glLoadIdentity();
+			// Lighting and geometry that moves with the camera should go here.
+			// (I.e. must be specified before viewing transformations.)
+			//none
+
+			// ARToolKit supplied distance in millimetres, but I want OpenGL to work in my units.
+			arglCameraViewRH((*it)->patt_trans, m, VIEW_SCALEFACTOR);
+			glLoadMatrixd(m);
+
+			// All other lighting and geometry goes here.
+
+			(*it)->Draw();
+
+		} 
+		
+		// Any 2D overlays go here.
 		//none
-
-		// ARToolKit supplied distance in millimetres, but I want OpenGL to work in my units.
-		arglCameraViewRH(gabumon->patt_trans, m, VIEW_SCALEFACTOR);
-		glLoadMatrixd(m);
-
-		// All other lighting and geometry goes here.
-		DrawSomething();
-	} // gPatt_found
-
-	// Any 2D overlays go here.
-	//none
+	}
 
 	glutSwapBuffers();
 }
@@ -450,13 +475,15 @@ int main(int argc, char** argv)
 		fprintf(stderr, "main(): Unable to set up AR camera.\n");
 		exit(-1);
 	}
-	
+
+	/*
 	if (!setupMarker(patt_name, &gPatt_id)) 
 	{
 		fprintf(stderr, "main(): Unable to set up AR marker.\n");
 		exit(-1);
 	}
-	
+	*/
+
 	// ----------------------------------------------------------------------------
 	// Library setup.
 	//

@@ -1,6 +1,29 @@
 #include "Piece.h"
 
 
+Piece::Piece(GLMmodel* model, char* patt_name)
+{
+	this->model = model;
+
+	this->right[0] = 1.0; this->right[1] = 0.0, this->right[2] = 0.0;
+	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
+	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
+
+	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
+	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
+	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
+
+	this->angle = 0.0;
+
+	this->patt_name = patt_name;
+
+	setupMarker(this->patt_name, &(this->patt_id));
+
+	this->patt_width = 80.0;
+	this->patt_centre[0] = 0.0; this->patt_centre[1] = 0.0;
+	this->patt_found = FALSE;
+}
+
 Piece::Piece(GLMmodel* model)
 {
 	this->model = model;
@@ -62,15 +85,17 @@ void Piece::Draw()
 {
 	glPushMatrix(); // Save world coordinate system.
 
-		glTranslatef(this->translate[0], this->translate[1], this->translate[2]); // Place base of cube on marker surface.
-
-		glRotatef(90.0, 1.0, 0.0, 0.0); // Rotate about z axis.
+		glTranslatef(0.0, 0.0, 0.0); // Place base of cube on marker surface.
 
 		glRotatef((float)(this->rotate[1] * RAD_TO_PI), this->up[0], this->up[1], this->up[2]);
 		glRotatef((float)(this->rotate[0] * RAD_TO_PI), this->right[0] , this->right[1] , this->right[2]);
 		glRotatef((float)(this->rotate[2] * RAD_TO_PI), this->front[0] , this->front[1] , this->front[2]);
 
+		glRotatef(90.0, 1.0, 0.0, 0.0);
+
 		glScalef(this->scale[0], this->scale[1], this->scale[2]);
+		
+		glTranslatef(this->translate[0], this->translate[1], this->translate[2]);
 
 		glDisable(GL_LIGHTING);	// Just use colours.
 
@@ -130,6 +155,21 @@ void Piece::Scale(double factor)
 	this->Scale(factor,factor,factor);
 }
 
+void Piece::ScaleX(double s)
+{
+	this->Scale(s,this->scale[1],this->scale[2]);
+}
+
+void Piece::ScaleY(double s)
+{
+	this->Scale(this->scale[0], s, this->scale[2]);
+}
+
+void Piece::ScaleZ(double s)
+{
+	this->Scale(this->scale[0], this->scale[1], s);
+}
+
 void Piece::SetSize(double sx, double sy, double sz)
 {
 	this->scale[0] = sx;
@@ -177,6 +217,35 @@ void Piece::TranslateY(double t)
 void Piece::TranslateZ(double t)
 {
 	this->Translate(0.0, 0.0, t);
+}
+
+void Piece::SetPosition(double x, double y, double z)
+{
+	this->translate[0] = x;
+	this->translate[1] = y;
+	this->translate[2] = z;
+}
+
+void Piece::SetPositionX(double x)
+{
+	this->SetPosition(x,this->translate[1],this->translate[2]);
+}
+
+void Piece::SetPositionY(double y)
+{
+	this->SetPosition(this->translate[0],y,this->translate[2]);
+}
+
+void Piece::SetPositionZ(double z)
+{
+	this->SetPosition(this->translate[0],this->translate[1],z);
+}
+
+void Piece::Animate()
+{
+	this->angle += 1.0;
+	this->SetSizeY((1 + sin(angle)/10));
+	this->SetPositionY((1.0 + sin(angle/1.5))/4);
 }
 
 Piece::~Piece(void)
