@@ -98,7 +98,7 @@ static void Init(void)
 {
 	gabumon = new Gabumon();
 	rook = new Rook();
-	//pawn = new Pawn();
+	pawn = new Pawn();
 
 
 	/*
@@ -114,7 +114,7 @@ static void Init(void)
 
 	pieces.push_back(gabumon);
 	pieces.push_back(rook);
-	//pieces.push_back(pawn);
+	pieces.push_back(pawn);
 
 	
 	/*

@@ -26,7 +26,7 @@ void Piece::Draw()
 		
 		glTranslatef(this->translate[0], this->translate[1], this->translate[2]);
 
-		glEnable(GL_LIGHTING);	// Just use colours.
+		glDisable(GL_LIGHTING);	// Just use colours.
 
 		glmDraw(this->model, GLM_TEXTURE | GLM_MATERIAL);
 
