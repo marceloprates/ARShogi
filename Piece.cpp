@@ -1,84 +1,13 @@
 #include "Piece.h"
 
 
-Piece::Piece(GLMmodel* model, char* patt_name)
+Piece::Piece(char* model_name, char* patt_name)
 {
-	this->model = model;
-
-	this->right[0] = 1.0; this->right[1] = 0.0, this->right[2] = 0.0;
-	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
-	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
-
-	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
-	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
-	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
-
-	this->angle = 0.0;
-
-	this->patt_name = patt_name;
-
-	setupMarker(this->patt_name, &(this->patt_id));
-
-	this->patt_width = 80.0;
-	this->patt_centre[0] = 0.0; this->patt_centre[1] = 0.0;
-	this->patt_found = FALSE;
+	this->Init(model_name,patt_name);
 }
 
-Piece::Piece(GLMmodel* model)
+Piece::~Piece(void)
 {
-	this->model = model;
-
-	this->right[0] = 1.0; this->right[1] = 0.0, this->right[2] = 0.0;
-	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
-	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
-
-	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
-	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
-	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
-
-	this->patt_name = "Data/custom/patt1.patt";
-
-	setupMarker(this->patt_name, &(this->patt_id));
-
-	this->patt_width = 80.0;
-	this->patt_centre[0] = 0.0; this->patt_centre[1] = 0.0;
-	this->patt_found = FALSE;
-}
-
-Piece::Piece(char* address)
-{
-	Piece(glmReadOBJ(address));
-}
-
-Piece::Piece(PieceType pieceType)
-{
-	switch(pieceType)
-	{
-		case King:
-			Piece("../Models/king.obj");
-			break;
-		case Rook:
-			Piece("../Models/rook.obj");
-			break;
-		case Bishop:
-			Piece("../Models/bishop.obj");
-			break;
-		case Gold_general:
-			Piece("../Models/gold_general.obj");
-			break;
-		case Silver_general:
-			Piece("../Models/silver_general.obj");
-			break;
-		case Knight:
-			Piece("../Models/knight.obj");
-			break;
-		case Lance:
-			Piece("../Models/lance.obj");
-			break;
-		case Gabumon:
-			Piece("../Models/gabumon.obj");
-			break;
-	}
 }
 
 void Piece::Draw()
@@ -97,7 +26,7 @@ void Piece::Draw()
 		
 		glTranslatef(this->translate[0], this->translate[1], this->translate[2]);
 
-		glDisable(GL_LIGHTING);	// Just use colours.
+		glEnable(GL_LIGHTING);	// Just use colours.
 
 		glmDraw(this->model, GLM_TEXTURE | GLM_MATERIAL);
 
@@ -243,13 +172,45 @@ void Piece::SetPositionZ(double z)
 
 void Piece::Animate()
 {
-	this->angle += 1.0;
-	this->SetSizeY((1 + sin(angle)/10));
-	this->SetPositionY((1.0 + sin(angle/1.5))/4);
 }
 
-Piece::~Piece(void)
+void Piece::Init(char* model_name, char* patt_name)
 {
+	// init angle
+
+	this->angle = 0.0;
+
+	// init vectors
+
+	this->right[0] = 1.0; this->right[1] = 0.0, this->right[2] = 0.0;
+	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
+	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
+
+	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
+	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
+	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
+
+	// init model
+
+	char model_path[50];
+
+	sprintf(model_path,"../Models/%s/%s.obj",model_name,model_name);
+
+	this->model = glmReadOBJ(model_path);
+
+	// init pattern
+
+	char patt_path[50];
+
+	sprintf(patt_path,"Data/custom/%s.patt",patt_name);
+
+	this->patt_path = patt_path;
+
+	setupMarker(this->patt_path, &(this->patt_id));
+
+	this->patt_width = 80.0;
+	this->patt_centre[0] = 0.0; this->patt_centre[1] = 0.0;
+	this->patt_found = FALSE;
 }
 
 int Piece::setupMarker(const char *patt_name, int *patt_id)

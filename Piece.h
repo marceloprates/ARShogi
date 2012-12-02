@@ -16,34 +16,18 @@
 
 #include "glm.h"
 
-enum PieceType
-{
-	King,
-	Rook,
-	Bishop,
-	Gold_general,
-	Silver_general,
-	Knight,
-	Lance,
-	Pawn,
-	Gabumon
-};
-
 class Piece
 {
 public:
 
-	const char*	patt_name;
+	const char*	patt_path;
 	double		patt_width;
 	double		patt_centre[2];
 	double		patt_trans[3][4];
 	int			patt_found;
 	int			patt_id;
 
-	Piece(GLMmodel* model, char* patt_name);
-	Piece(GLMmodel* model);
-	Piece(char* address);
-	Piece(PieceType pieceType);
+	Piece(char* model_name, char* patt_name);
 	~Piece(void);
 
 	void Draw();
@@ -72,10 +56,12 @@ public:
 	void SetPositionY(double y);
 	void SetPositionZ(double z);
 
-	void Animate();
+	void Jump();
+	void Rotate();
+	virtual void Animate();
 
 
-private:
+protected:
 
 	GLMmodel* model;
 
@@ -89,6 +75,7 @@ private:
 
 	double angle;
 
+	void Init(char* model_name, char* patt_name);
 	static int setupMarker(const char *patt_name, int *patt_id);
 	
 };

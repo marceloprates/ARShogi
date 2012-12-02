@@ -19,7 +19,18 @@
 #include <list>
 
 #include "glm.h"
+
 #include "Piece.h"
+#include "Bishop.h"
+#include "GoldGeneral.h"
+#include "King.h"
+#include "Knight.h"
+#include "Lance.h"
+#include "Pawn.h"
+#include "Rook.h"
+#include "SilverGeneral.h"
+
+#include "Gabumon.h"
 
 // ============================================================================
 //	Constants
@@ -85,13 +96,10 @@ static std::list<Piece*> pieces;
 
 static void Init(void)
 {
-	GLMmodel* m;
+	gabumon = new Gabumon();
+	rook = new Rook();
+	//pawn = new Pawn();
 
-	m = glmReadOBJ("../Models/gabumon.obj"); glmScale(m,1.0);
-	gabumon = new Piece(glmReadOBJ("../Models/gabumon.obj"),"Data/custom/patt1.patt");
-
-	m = glmReadOBJ("../Models/mewtwo/mewtwo.obj"); glmScale(m,0.1);
-	mewtwo = new Piece(m,"Data/custom/patt2.patt");
 
 	/*
 	king = new Piece(glmReadOBJ("../Models/king.obj"));
@@ -105,7 +113,10 @@ static void Init(void)
 	*/
 
 	pieces.push_back(gabumon);
-	pieces.push_back(mewtwo);
+	pieces.push_back(rook);
+	//pieces.push_back(pawn);
+
+	
 	/*
 	pieces.push_back(king);
 	pieces.push_back(rook);
