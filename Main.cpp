@@ -97,8 +97,9 @@ static std::list<Piece*> pieces;
 static void Init(void)
 {
 	gabumon = new Gabumon();
-	rook = new Rook();
-	pawn = new Pawn();
+	//rook = new Rook();
+	//pawn = new Pawn();
+	//gold_general = new GoldGeneral();
 
 
 	/*
@@ -113,8 +114,9 @@ static void Init(void)
 	*/
 
 	pieces.push_back(gabumon);
-	pieces.push_back(rook);
-	pieces.push_back(pawn);
+	//pieces.push_back(rook);
+	//pieces.push_back(pawn);
+	//pieces.push_back(gold_general);
 
 	
 	/*
@@ -255,6 +257,15 @@ static void Keyboard(unsigned char key, int x, int y)
 	int mode;
 	switch (key) {
 		case 0x1B:						// Quit.
+		case 'x':
+			gabumon->RotateX(0.1);
+			break;
+		case 'y':
+			gabumon->RotateY(0.1);
+			break;
+		case 'z':
+			gabumon->RotateZ(0.1);
+			break;
 		case 'Q':
 		case 'q':
 			Quit();
@@ -301,7 +312,7 @@ static void AnimateModels(void)
 {
 	for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
 	{
-		(*it)->Animate();
+		//(*it)->Animate();
 	}
 }
 

@@ -1,11 +1,18 @@
 #include "GoldGeneral.h"
+#include <math.h>
 
 
-GoldGeneral::GoldGeneral(void): Piece("gold_general","")
+GoldGeneral::GoldGeneral(void): Piece("gold_general","patt3")
 {
+	this->RotateX(-3.14/2);
 }
 
 
 GoldGeneral::~GoldGeneral(void)
 {
+}
+
+void GoldGeneral::Animate()
+{
+	this->RotateY(0.1);
 }

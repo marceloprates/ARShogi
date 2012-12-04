@@ -6,5 +6,7 @@ class GoldGeneral :
 public:
 	GoldGeneral(void);
 	~GoldGeneral(void);
+
+	virtual void Animate();
 };
 

@@ -59,15 +59,13 @@ public:
 	void Jump();
 	void Rotate();
 	virtual void Animate();
-
+double right[3];
+	double up[3];
+	double front[3];
 
 protected:
 
 	GLMmodel* model;
-
-	double right[3];
-	double up[3];
-	double front[3];
 
 	double rotate[3];
 	double scale[3];
@@ -77,6 +75,8 @@ protected:
 
 	void Init(char* model_name, char* patt_name);
 	static int setupMarker(const char *patt_name, int *patt_id);
+
+	void Rotate(double axis[3], double vector[3], double angle);
 	
 };
 

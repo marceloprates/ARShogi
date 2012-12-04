@@ -20,7 +20,7 @@ void Piece::Draw()
 		glRotatef((float)(this->rotate[0] * RAD_TO_PI), this->right[0] , this->right[1] , this->right[2]);
 		glRotatef((float)(this->rotate[2] * RAD_TO_PI), this->front[0] , this->front[1] , this->front[2]);
 
-		glRotatef(90.0, 1.0, 0.0, 0.0);
+		//glRotatef(90.0, 1.0, 0.0, 0.0);
 
 		glScalef(this->scale[0], this->scale[1], this->scale[2]);
 		
@@ -35,39 +35,33 @@ void Piece::Draw()
 
 void Piece::RotateX(double angle)
 {
-	float x = this->right[0];
-	float y = this->right[1];
-	float z = this->right[2];
+	//angle = angle*0.0174533;
 
-	this->right[0] = x;
-	this->right[1] = cosf(angle)*y - sinf(angle)*z;
-	this->right[2] = sinf(angle)*y + cosf(angle)*z;
+	Rotate(this->right,this->right,angle);
+	Rotate(this->right,this->up,angle);
+	Rotate(this->right,this->front,angle);
 
 	this->rotate[0] += angle;
 }
 
 void Piece::RotateY(double angle)
 {
-	float x = this->up[0];
-	float y = this->up[1];
-	float z = this->up[2];
+	//angle = angle*0.0174533;
 
-	this->up[0] = cosf(angle)*x + sinf(angle)*z;
-	this->up[1] = y;
-	this->up[2] = -sinf(angle)*x + cosf(angle)*z;
+	Rotate(this->up,this->up,angle);
+	Rotate(this->up,this->right,angle);
+	Rotate(this->up,this->front,angle);
 
 	this->rotate[1] += angle;
 }
 
 void Piece::RotateZ(double angle)
 {
-	float x = this->front[0];
-	float y = this->front[1];
-	float z = this->front[2];
+	//angle = angle*0.0174533;
 
-	this->front[0] = cosf(angle)*x - sinf(angle)*y;
-	this->front[1] = sinf(angle)*x + cosf(angle)*y;
-	this->front[2] = z;
+	Rotate(this->front,this->front,angle);
+	Rotate(this->front,this->right,angle);
+	Rotate(this->front,this->up,angle);
 
 	this->rotate[2] += angle;
 }
@@ -223,4 +217,19 @@ int Piece::setupMarker(const char *patt_name, int *patt_id)
     }
 	
 	return (TRUE);
+}
+
+void Piece::Rotate(double axis[3], double vector[3], double angle)
+{
+	double ux = axis[0];
+	double uy = axis[1];
+	double uz = axis[2];
+
+	double x = vector[0];
+	double y = vector[1];
+	double z = vector[2];
+
+	vector[0] = x*(cosf(angle) + ux*ux*(1-cosf(angle))) + y*(ux*uy*(1-cosf(angle))-uz*sinf(angle)) + z*(ux*uz*(1-cosf(angle)) + uy*sinf(angle));
+	vector[1] = x*(uy*ux*(1-cosf(angle)) + uz*sinf(angle)) + y*(cosf(angle) + uy*uy*(1-cosf(angle))) + z*(uy*uz*(1-cosf(angle)) - ux*sinf(angle));
+	vector[2] = x*(uz*ux*(1-cosf(angle)) - uy*sinf(angle)) + y*(uz*uy*(1-cosf(angle)) + ux*sinf(angle)) + z*(cosf(angle) + uz*uz*(1-cosf(angle)));
 }
