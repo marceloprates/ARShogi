@@ -257,6 +257,8 @@ static void Keyboard(unsigned char key, int x, int y)
 	int mode;
 	switch (key) {
 		case 0x1B:						// Quit.
+		case 'r':
+			gabumon->Reset();
 		case 'x':
 			gabumon->RotateX(0.1);
 			break;
@@ -480,7 +482,7 @@ int main(int argc, char** argv)
 #else
 	char			*vconf = "";
 #endif
-	const char *patt_name  = "Data/custom/patt1.patt";
+	const char *patt_name  = "Data/custom/kaki.pat";
 	
 	// ----------------------------------------------------------------------------
 	// Library inits.

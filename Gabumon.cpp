@@ -1,7 +1,7 @@
 #include "Gabumon.h"
 
 
-Gabumon::Gabumon(void): Piece("gabumon","patt1")
+Gabumon::Gabumon(void): Piece("gabumon","ryuo")
 {
 }
 

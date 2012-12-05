@@ -15,6 +15,7 @@
 #include <math.h>
 
 #include "glm.h"
+#include "glmath\glm\gtc\quaternion.hpp"
 
 class Piece
 {
@@ -31,6 +32,8 @@ public:
 	~Piece(void);
 
 	void Draw();
+
+	void Reset();
 
 	void RotateX(double angle);
 	void RotateY(double angle);
@@ -78,5 +81,11 @@ protected:
 
 	void Rotate(double axis[3], double vector[3], double angle);
 	
+private:
+
+	glm::fquat orientation;
+
+	void ChangeOrientation(double angle, glm::vec3 axis);
+
 };
 

@@ -1,5 +1,5 @@
 #include "Piece.h"
-
+#define QUAT
 
 Piece::Piece(char* model_name, char* patt_name)
 {
@@ -15,11 +15,13 @@ void Piece::Draw()
 	glPushMatrix(); // Save world coordinate system.
 
 		glTranslatef(0.0, 0.0, 0.0); // Place base of cube on marker surface.
-
+#ifndef QUAT
 		glRotatef((float)(this->rotate[1] * RAD_TO_PI), this->up[0], this->up[1], this->up[2]);
 		glRotatef((float)(this->rotate[0] * RAD_TO_PI), this->right[0] , this->right[1] , this->right[2]);
 		glRotatef((float)(this->rotate[2] * RAD_TO_PI), this->front[0] , this->front[1] , this->front[2]);
-
+#else
+		glRotatef(glm::angle(orientation), orientation.x, orientation.y, orientation.z);
+#endif
 		//glRotatef(90.0, 1.0, 0.0, 0.0);
 
 		glScalef(this->scale[0], this->scale[1], this->scale[2]);
@@ -33,13 +35,27 @@ void Piece::Draw()
 	glPopMatrix();	// Restore world coordinate system.
 }
 
+void Piece::Reset()
+{
+	this->right[0] = 1.0; this->right[1] = 0.0, this->right[2] = 0.0;
+	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
+	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
+
+	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
+	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
+	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
+}
+
 void Piece::RotateX(double angle)
 {
 	//angle = angle*0.0174533;
-
+#ifndef QUAT
 	Rotate(this->right,this->right,angle);
 	Rotate(this->right,this->up,angle);
 	Rotate(this->right,this->front,angle);
+#else
+	ChangeOrientation(angle, glm::vec3(1.0, 0.0, 0.0));
+#endif
 
 	this->rotate[0] += angle;
 }
@@ -47,22 +63,26 @@ void Piece::RotateX(double angle)
 void Piece::RotateY(double angle)
 {
 	//angle = angle*0.0174533;
-
+#ifndef QUAT
 	Rotate(this->up,this->up,angle);
 	Rotate(this->up,this->right,angle);
 	Rotate(this->up,this->front,angle);
-
+#else
+	ChangeOrientation(angle, glm::vec3(0.0, 1.0, 0.0));
+#endif
 	this->rotate[1] += angle;
 }
 
 void Piece::RotateZ(double angle)
 {
 	//angle = angle*0.0174533;
-
+#ifndef QUAT
 	Rotate(this->front,this->front,angle);
 	Rotate(this->front,this->right,angle);
 	Rotate(this->front,this->up,angle);
-
+#else
+	ChangeOrientation(angle, glm::vec3(0.0, 0.0, 1.0));
+#endif
 	this->rotate[2] += angle;
 }
 
@@ -180,6 +200,8 @@ void Piece::Init(char* model_name, char* patt_name)
 	this->up[0] = 0.0; this->up[1] = 1.0; this->up[2] = 0.0;
 	this->front[0] = 0.0; this->front[1] = 0.0; this->front[2] = 1.0;
 
+	this->orientation = glm::fquat();
+
 	this->rotate[0] = 0.0; this->rotate[1] = 0.0; this->rotate[2] = 0.0;
 	this->scale[0] = 1.0; this->scale[1] = 1.0; this->scale[2] = 1.0;
 	this->translate[0] = 0.0; this->translate[1] = 0.0; this->translate[2] = 0.0;
@@ -232,4 +254,16 @@ void Piece::Rotate(double axis[3], double vector[3], double angle)
 	vector[0] = x*(cosf(angle) + ux*ux*(1-cosf(angle))) + y*(ux*uy*(1-cosf(angle))-uz*sinf(angle)) + z*(ux*uz*(1-cosf(angle)) + uy*sinf(angle));
 	vector[1] = x*(uy*ux*(1-cosf(angle)) + uz*sinf(angle)) + y*(cosf(angle) + uy*uy*(1-cosf(angle))) + z*(uy*uz*(1-cosf(angle)) - ux*sinf(angle));
 	vector[2] = x*(uz*ux*(1-cosf(angle)) - uy*sinf(angle)) + y*(uz*uy*(1-cosf(angle)) + ux*sinf(angle)) + z*(cosf(angle) + uz*uz*(1-cosf(angle)));
+}
+
+void Piece::ChangeOrientation(double angle, glm::vec3 axis)
+{
+	glm::vec3 normalizedAxis = glm::normalize(axis);
+    
+    axis = axis * sinf(angle / 2.0f);
+    double scalar = cosf(angle / 2.0f);
+    
+    glm::fquat offset(scalar, axis.x, axis.y, axis.z);
+
+	this->orientation = glm::normalize(this->orientation * offset);
 }
