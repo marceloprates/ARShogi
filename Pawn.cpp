@@ -1,7 +1,7 @@
 #include "Pawn.h"
 
 
-Pawn::Pawn(void): Piece("pawn","patt3")
+Pawn::Pawn(void): Piece("pawn","fu")
 {
 	glmScale(this->model,1.0);
 	this->TranslateZ(0.5);
