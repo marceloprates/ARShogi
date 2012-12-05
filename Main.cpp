@@ -1,5 +1,4 @@
 
-
 // ============================================================================
 //	Includes
 // ============================================================================
@@ -97,11 +96,6 @@ static std::list<Piece*> pieces;
 static void Init(void)
 {
 	gabumon = new Gabumon();
-	//rook = new Rook();
-	//pawn = new Pawn();
-	//gold_general = new GoldGeneral();
-
-
 	/*
 	king = new Piece(glmReadOBJ("../Models/king.obj"));
 	rook = new Piece(glmReadOBJ("../Models/rook.obj"));
@@ -112,12 +106,6 @@ static void Init(void)
 	lance = new Piece(glmReadOBJ("../Models/lance.obj"));
 	pawn = new Piece(glmReadOBJ("../Models/pawn.obj"));
 	*/
-
-	pieces.push_back(gabumon);
-	//pieces.push_back(rook);
-	//pieces.push_back(pawn);
-	//pieces.push_back(gold_general);
-
 	
 	/*
 	pieces.push_back(king);
@@ -129,11 +117,6 @@ static void Init(void)
 	pieces.push_back(lance);
 	pieces.push_back(pawn);
 	*/
-}
-
-static void DrawSomething(void)
-{
-	gabumon->Draw();
 }
 
 static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
