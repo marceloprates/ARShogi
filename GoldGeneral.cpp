@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-GoldGeneral::GoldGeneral(void): Piece("gold_general","patt3")
+GoldGeneral::GoldGeneral(void): Piece("gold_general","kin")
 {
 	this->RotateX(-3.14/2);
 }
