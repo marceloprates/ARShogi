@@ -4,7 +4,7 @@
 
 GoldGeneral::GoldGeneral(void): Piece("gold_general","kin")
 {
-	this->RotateX(-3.14/2);
+	glmScale(this->model,0.5);
 }
 
 

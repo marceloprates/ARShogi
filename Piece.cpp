@@ -218,7 +218,7 @@ void Piece::Init(char* model_name, char* patt_name)
 
 	char patt_path[50];
 
-	sprintf(patt_path,"Data/custom/%s.patt",patt_name);
+	sprintf(patt_path,"Data/custom/%s.pat",patt_name);
 
 	this->patt_path = patt_path;
 

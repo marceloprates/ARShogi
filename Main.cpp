@@ -95,28 +95,28 @@ static std::list<Piece*> pieces;
 
 static void Init(void)
 {
-	gabumon = new Gabumon();
-	/*
-	king = new Piece(glmReadOBJ("../Models/king.obj"));
-	rook = new Piece(glmReadOBJ("../Models/rook.obj"));
-	bishop = new Piece(glmReadOBJ("../Models/bishop.obj"));
-	gold_general = new Piece(glmReadOBJ("../Models/gold_general.obj"));
-	silver_general = new Piece(glmReadOBJ("../Models/silver_general.obj"));
-	knight = new Piece(glmReadOBJ("../Models/knight.obj"));
-	lance = new Piece(glmReadOBJ("../Models/lance.obj"));
-	pawn = new Piece(glmReadOBJ("../Models/pawn.obj"));
-	*/
+	//gabumon = new Gabumon();
 	
-	/*
-	pieces.push_back(king);
+	//king = new King();
+	rook = new Rook();
+	//bishop = new Bishop();
+	gold_general = new GoldGeneral();
+	silver_general = new SilverGeneral();
+	//knight = new Knight();
+	//lance = new Lance();
+	pawn = new Pawn();
+	
+	
+	
+	//pieces.push_back(king);
 	pieces.push_back(rook);
-	pieces.push_back(bishop);
+	//pieces.push_back(bishop);
 	pieces.push_back(gold_general);
 	pieces.push_back(silver_general);
-	pieces.push_back(knight);
-	pieces.push_back(lance);
+	//pieces.push_back(knight);
+	//pieces.push_back(lance);
 	pieces.push_back(pawn);
-	*/
+	
 }
 
 static int setupCamera(const char *cparam_name, char *vconf, ARParam *cparam)
@@ -241,15 +241,15 @@ static void Keyboard(unsigned char key, int x, int y)
 	switch (key) {
 		case 0x1B:						// Quit.
 		case 'r':
-			gabumon->Reset();
+			silver_general->Reset();
 		case 'x':
-			gabumon->RotateX(0.1);
+			silver_general->RotateX(0.1);
 			break;
 		case 'y':
-			gabumon->RotateY(0.1);
+			silver_general->RotateY(0.1);
 			break;
 		case 'z':
-			gabumon->RotateZ(0.1);
+			silver_general->RotateZ(0.1);
 			break;
 		case 'Q':
 		case 'q':
