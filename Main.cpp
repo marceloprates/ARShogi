@@ -97,24 +97,24 @@ static void Init(void)
 {
 	//gabumon = new Gabumon();
 	
-	//king = new King();
+	king = new King();
 	rook = new Rook();
 	//bishop = new Bishop();
 	gold_general = new GoldGeneral();
 	silver_general = new SilverGeneral();
-	//knight = new Knight();
-	//lance = new Lance();
+	knight = new Knight();
+	lance = new Lance();
 	pawn = new Pawn();
 	
 	
 	
-	//pieces.push_back(king);
+	pieces.push_back(king);
 	pieces.push_back(rook);
 	//pieces.push_back(bishop);
 	pieces.push_back(gold_general);
 	pieces.push_back(silver_general);
-	//pieces.push_back(knight);
-	//pieces.push_back(lance);
+	pieces.push_back(knight);
+	pieces.push_back(lance);
 	pieces.push_back(pawn);
 	
 }
@@ -241,15 +241,15 @@ static void Keyboard(unsigned char key, int x, int y)
 	switch (key) {
 		case 0x1B:						// Quit.
 		case 'r':
-			silver_general->Reset();
+			knight->Reset();
 		case 'x':
-			silver_general->RotateX(0.1);
+			knight->TranslateX(0.1);
 			break;
 		case 'y':
-			silver_general->RotateY(0.1);
+			knight->TranslateY(0.1);
 			break;
 		case 'z':
-			silver_general->RotateZ(0.1);
+			knight->TranslateZ(0.1);
 			break;
 		case 'Q':
 		case 'q':
