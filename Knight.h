@@ -6,5 +6,7 @@ class Knight :
 public:
 	Knight(void);
 	~Knight(void);
+
+	virtual void Animate();
 };
 

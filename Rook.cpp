@@ -14,5 +14,5 @@ Rook::~Rook(void)
 
 void Rook::Animate()
 {
-	this->RotateZ(0.1);
+	this->RotateY(0.1);
 }

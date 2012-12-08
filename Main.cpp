@@ -99,22 +99,18 @@ static void Init(void)
 	
 	king = new King();
 	rook = new Rook();
-	//bishop = new Bishop();
 	gold_general = new GoldGeneral();
 	silver_general = new SilverGeneral();
 	knight = new Knight();
-	lance = new Lance();
 	pawn = new Pawn();
 	
 	
 	
 	pieces.push_back(king);
 	pieces.push_back(rook);
-	//pieces.push_back(bishop);
 	pieces.push_back(gold_general);
 	pieces.push_back(silver_general);
 	pieces.push_back(knight);
-	pieces.push_back(lance);
 	pieces.push_back(pawn);
 	
 }
@@ -297,7 +293,7 @@ static void AnimateModels(void)
 {
 	for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
 	{
-		//(*it)->Animate();
+		(*it)->Animate();
 	}
 }
 

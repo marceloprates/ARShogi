@@ -6,5 +6,7 @@ class King :
 public:
 	King(void);
 	~King(void);
+
+	virtual void Animate();
 };
 

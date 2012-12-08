@@ -6,5 +6,7 @@ class SilverGeneral :
 public:
 	SilverGeneral(void);
 	~SilverGeneral(void);
+
+	virtual void Animate();
 };
 

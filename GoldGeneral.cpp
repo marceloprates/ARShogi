@@ -14,4 +14,6 @@ GoldGeneral::~GoldGeneral(void)
 
 void GoldGeneral::Animate()
 {
+	this->angle += 1.0;
+	this->SetSizeZ((1 + sin(angle)/10));
 }

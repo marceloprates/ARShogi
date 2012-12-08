@@ -11,3 +11,9 @@ SilverGeneral::SilverGeneral(void): Piece("silver_general","gin")
 SilverGeneral::~SilverGeneral(void)
 {
 }
+
+void SilverGeneral::Animate()
+{
+	this->angle += 1.0;
+	this->SetSizeZ((1 + sin(angle)/10));
+}
