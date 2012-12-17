@@ -2,10 +2,10 @@
 #include <math.h>
 
 
-GoldGeneral::GoldGeneral(void): Piece("gold_general","kin")
+GoldGeneral::GoldGeneral(void): Piece("gold_general","gold")//"kin")//"letters/g")//
 {
 	glmScale(this->model,0.5);
-	this->RotateZ(1.5*3.14);
+	this->RotateZ(2.0*3.14);
 }
 
 GoldGeneral::~GoldGeneral(void)

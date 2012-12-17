@@ -1,11 +1,11 @@
 #include "Pawn.h"
 
 
-Pawn::Pawn(void): Piece("pawn","fu")
+Pawn::Pawn(void): Piece("pawn","pawn")//"fuhyo")//"letters/p")//
 {
 	glmScale(this->model,1.0);
 	this->RotateX(3.14/2);
-	this->RotateY(-3.14/2);
+	this->RotateY(3.14/2);
 	this->TranslateZ(0.5);
 }
 

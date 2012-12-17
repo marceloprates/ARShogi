@@ -6,5 +6,7 @@ class Bishop :
 public:
 	Bishop(void);
 	~Bishop(void);
+
+	virtual void Animate();
 };
 

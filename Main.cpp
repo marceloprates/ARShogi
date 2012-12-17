@@ -28,6 +28,10 @@
 #include "Pawn.h"
 #include "Rook.h"
 #include "SilverGeneral.h"
+#include "Dragon.h"
+#include "Horse.h"
+#include "PromotedSilver.h"
+#include "Tokin.h"
 
 #include "Gabumon.h"
 
@@ -86,6 +90,23 @@ static Piece* silver_general;
 static Piece* knight;
 static Piece* lance;
 static Piece* pawn;
+static Piece* dragon;
+static Piece* horse;
+static Piece* tokin;
+static Piece* promoted_silver;
+
+static Piece* king2;
+static Piece* rook2;
+static Piece* bishop2;
+static Piece* gold_general2;
+static Piece* silver_general2;
+static Piece* knight2;
+static Piece* lance2;
+static Piece* pawn2;
+static Piece* dragon2;
+static Piece* horse2;
+static Piece* tokin2;
+static Piece* promoted_silver2;
 
 static std::list<Piece*> pieces;
 
@@ -101,17 +122,64 @@ static void Init(void)
 	rook = new Rook();
 	gold_general = new GoldGeneral();
 	silver_general = new SilverGeneral();
-	knight = new Knight();
+	//knight = new Knight();
 	pawn = new Pawn();
+	bishop = new Bishop();
+	dragon = new Dragon();
+	horse = new Horse();
+	tokin = new Tokin();
+	promoted_silver = new PromotedSilver();
 	
+	king2 = new King();//king;//
+	rook2 = new Rook();//rook;//
+	gold_general2 = new GoldGeneral();//gold_general;//
+	silver_general2 = new SilverGeneral();//silver_general;//
+	//knight2 = new Knight();
+	pawn2 = new Pawn();//pawn;//
+	bishop2 = new Bishop();//bishop;//
+	dragon2 = new Dragon();//dragon;//
+	horse2 = new Horse();//horse;//
+	tokin2 = new Tokin();//tokin;//
+	promoted_silver2 = new PromotedSilver();//promoted_silver;//
+	
+	king2->patt_id = king->patt_id;
+	rook2->patt_id = rook->patt_id;
+	gold_general2->patt_id = gold_general->patt_id;
+	silver_general2->patt_id = silver_general->patt_id;
+	bishop2->patt_id = bishop->patt_id;
+	pawn2->patt_id = pawn->patt_id;
+	dragon2->patt_id = dragon->patt_id;
+	gold_general2->patt_id = gold_general->patt_id;
+	silver_general2->patt_id = silver_general->patt_id;
+	promoted_silver2->patt_id = promoted_silver->patt_id;
+	pawn2->patt_id = pawn->patt_id;
+	horse2->patt_id = horse->patt_id;
+	tokin2->patt_id = tokin->patt_id;
 	
 	
 	pieces.push_back(king);
 	pieces.push_back(rook);
 	pieces.push_back(gold_general);
 	pieces.push_back(silver_general);
-	pieces.push_back(knight);
+	//pieces.push_back(knight);
 	pieces.push_back(pawn);
+	pieces.push_back(bishop);
+	pieces.push_back(dragon);
+	pieces.push_back(horse);
+	pieces.push_back(tokin);
+	pieces.push_back(promoted_silver);
+	
+	pieces.push_back(king2);
+	pieces.push_back(rook2);
+	pieces.push_back(gold_general2);
+	pieces.push_back(silver_general2);
+	//pieces.push_back(knight2);
+	pieces.push_back(pawn2);
+	pieces.push_back(bishop2);
+	pieces.push_back(dragon2);
+	pieces.push_back(horse2);
+	pieces.push_back(tokin2);
+	pieces.push_back(promoted_silver2);
 	
 }
 
@@ -291,10 +359,10 @@ static void Keyboard(unsigned char key, int x, int y)
 
 static void AnimateModels(void)
 {
-	for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
-	{
-		(*it)->Animate();
-	}
+	//for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
+	//{
+		//(*it)->Animate();
+	//}
 }
 
 static void Idle(void)
@@ -305,6 +373,7 @@ static void Idle(void)
 	ARUint8 *image;
 
 	ARMarkerInfo    *marker_info;					// Pointer to array holding the details of detected markers.
+	bool *invalid_marker;
     int             marker_num;						// Count of number of markers detected.
     int             j, k;
 
@@ -327,6 +396,8 @@ static void Idle(void)
 			exit(-1);
 		}
 
+		invalid_marker = (bool*)calloc(marker_num, sizeof(bool));
+
 		for(std::list<Piece*>::iterator it = pieces.begin(); it != pieces.end(); it++)
 		{
 			(*it)->patt_found = FALSE;	// Invalidate any previous detected markers.
@@ -337,7 +408,7 @@ static void Idle(void)
 			k = -1;
 			for (j = 0; j < marker_num; j++) 
 			{				
-				if (marker_info[j].id == (*it)->patt_id)
+				if (!invalid_marker[j] && marker_info[j].id == (*it)->patt_id)
 				{
 
 					if (k == -1) // First marker detected.
@@ -356,6 +427,7 @@ static void Idle(void)
 				// Get the transformation between the marker and the real camera into gPatt_trans.
 				arGetTransMat(&(marker_info[k]), (*it)->patt_centre, (*it)->patt_width, (*it)->patt_trans);
 				(*it)->patt_found = TRUE;
+				invalid_marker[k] = true; 
 			}
 
 		}
@@ -457,7 +529,7 @@ int main(int argc, char** argv)
 	// Camera configuration.
 	//
 #ifdef _WIN32
-	char			*vconf = "Data\\WDM_camera_flipV.xml";
+	char			*vconf = "Data\\WDM_camera_flipVH.xml";
 #else
 	char			*vconf = "";
 #endif

@@ -1,7 +1,7 @@
 #include "SilverGeneral.h"
 
 
-SilverGeneral::SilverGeneral(void): Piece("silver_general","gin")
+SilverGeneral::SilverGeneral(void): Piece("silver_general","silver")//"ginsho")//"letters/s")//
 {
 	glmScale(this->model,0.5);
 	this->RotateZ(3.14);

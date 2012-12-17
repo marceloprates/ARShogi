@@ -1,10 +1,10 @@
 #include "King.h"
 
 
-King::King(void): Piece("king","o")
+King::King(void): Piece("king","king")//"gyokusho")//"letters/k")//
 {
 	this->RotateX(3.14/2);
-	this->RotateY(3.14/2);
+	this->RotateY(3.14);
 }
 
 void King::Animate()

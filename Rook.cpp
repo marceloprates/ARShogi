@@ -1,7 +1,7 @@
 #include "Rook.h"
 
 
-Rook::Rook(void): Piece("rook","hi")
+Rook::Rook(void): Piece("rook","rook")//"hisha")//"letters/r")//
 {
 	glmScale(this->model,0.20);
 	this->RotateX(3.14/2);
